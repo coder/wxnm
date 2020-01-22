@@ -1,0 +1,3 @@
+# eslint config is from https://github.com/cdr/frontend-configs
+extends:
+  - "@coder/eslint-config"

@@ -1,0 +1,48 @@
+{
+  "name": "@coder/wxnm",
+  "version": "0.0.1",
+  "description": "A library for providing TypeScript typed communication between your web extension and your native Node application using Native Messaging",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/cdr/wxnm",
+  "license": "MIT",
+  "prettier": "@coder/prettier-config",
+  "scripts": {
+    "build": "rm -rf dist/ && rollup -c",
+    "build:watch": "rollup -c -w",
+    "prepublishOnly": "yarn build"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@coder/eslint-config": "^1.0.0",
+    "@coder/prettier-config": "^1.0.0",
+    "@coder/typescript-config": "^1.0.0",
+    "eslint": "^6.8.0",
+    "husky": "^4.2.0",
+    "lint-staged": "^10.0.2",
+    "prettier": "^1.19.1",
+    "rollup": "^1.29.1",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "typescript": "^3.7.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged --quiet"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,html,json,css,scss,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings 0",
+      "git add"
+    ]
+  }
+}

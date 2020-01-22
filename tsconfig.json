@@ -1,0 +1,14 @@
+{
+  "extends": "@coder/typescript-config",
+  "compilerOptions": {
+    "module": "esnext", // Rollup requires this
+    "sourceMap": true,
+    "declaration": true,
+    "lib": ["dom", "es2017"],
+    "baseUrl": ".",
+    "noImplicitAny": false, // Fixes issue with storybook
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
