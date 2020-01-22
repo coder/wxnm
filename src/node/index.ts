@@ -1,2 +1,2 @@
-export * from './NodeNativeMessager'
-export * from './installManifest'
+export * from './messenger'
+export * from './install'

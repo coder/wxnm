@@ -1,4 +1,4 @@
-# (W)eb E(x)tension (N)ative (M)essaging
+# (W)eb E(x)tension (N)ative (M)essenger
 
 `wxnm` is a library for providing TypeScript typed communication between your web extension and your native Node application using [Native Messaging](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging). It also provides some utilities for installing your native application's app manifest.
 
@@ -28,9 +28,7 @@ import { NativeMessage } from "@coder/wxnm"
 // Messages the extension will send, native app will recieve
 interface PingMessage extends NativeMessage {
   type: "PING"
-  data: {
-    message: string
-  }
+  message: string
 }
 
 export type ExtensionMessages = PingMessage
@@ -38,16 +36,12 @@ export type ExtensionMessages = PingMessage
 // Messages the native app will send, extension will receive
 interface PongMessage extends NativeMessage {
   type: "PONG"
-  data: {
-    message: string
-  }
+  message: string
 }
 
 interface ErrorMessage extends NativeMessage {
   type: "ERROR"
-  data: {
-    error: string  
-  }
+  error: string  
 }
 
 export type NativeMessages = PongMessage | ErrorMessage
@@ -55,40 +49,40 @@ export type NativeMessages = PongMessage | ErrorMessage
 
 ### Web Extension
 
-In your web extension, you'll instantiate a new `ExtensionNativeMessager<ExtensionMessages, NativeMessages>` which will allow you to send and listen for messages:
+In your web extension, you'll instantiate a new `ExtensionNativeMessenger` which will allow you to send and listen for messages:
 
 ```ts
-import { ExtensionNativeMessager } from "@coder/wxnm"
+import { createExtensionMessenger } from "@coder/wxnm"
 import { ExtensionMessages, NativeMessages } from "../shared/types"
 
-const msger = new ExtensionNativeMessager<ExtensionMessages, NativeMessages>("name_of_app")
+const msger = createExtensionMessenger<ExtensionMessages, NativeMessages>("name_of_app")
 
-msger.onMessage.addListener(msg => {
+msger.onMessage((msg: NativeMessages) => {
   switch (msg.type) {
     case "PONG":
-      console.log("Got PONG back!", msg.data.message)
+      console.log("Got PONG back!", msg.message)
     case "ERROR":
-      console.error("Uh oh!", msg.data.error)
+      console.error("Uh oh!", msg.error)
   }
 })
 
 msger.sendMessage({
   type: "PING",
-  data: { message: "Hello" },
+  message: "Hello",
 })
 ```
 
 ### Native Node Application
 
-The node side looks very familiar, with the generics flipped for the `NodeNativeMessager<NativeMessages, ExtensionMessages>` class:
+The node side looks very familiar, with the generics flipped for the `NodeNativeMessenger` class:
 
 ```ts
-import { NodeNativeMessager } from "@coder/wxnm"
+import { createNodeMessenger } from "@coder/wxnm"
 import { ExtensionMessages, NativeMessages } from "../shared/types"
 
-const msger = new NodeNativeMessager<NativeMessages, ExtensionMessages>()
+const msger = createNodeMessenger<NativeMessages, ExtensionMessages>()
 
-msger.onMessage.addListener(msg => {
+msger.onMessage((msg: ExtensionMessages) => {
   switch (msg.type) {
     case "PING":
       msger.sendMessage({
@@ -101,14 +95,52 @@ msger.onMessage.addListener(msg => {
 
 ## API
 
-### ExtensionNativeMessager
+### `createExtensionMessenger(): ExtensionNativeMessenger`
+
+Creates and connects an `ExtensionNativeMessenger` instance to a native application.
+
+### `ExtensionNativeMessenger`
 
 A class wrapper around [`runtime.connectNative`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/connectNative)
 
-### NodeNativeMessager
+#### `disconnect(): void`
+
+Disconnects the messenger from the native app, which will fire `onDisconnect` listeners.
+
+#### `onDisconnect(listener: (err?: Error) => void): () => void`
+
+Add a disconnect listener that receives an `Error` object if available. Called if either the extension or app triggers the disconnect.
+
+Returns a function that when called, removes the listener.
+
+#### `onMessage(listener: (msg: Message) => void): () => void`
+
+Add a message listener that receives a `Message` object whenever one is sent from the native app.
+
+Returns a function that when called, removes the listener.
+
+### `sendMessage(msg: Message): void`
+
+Sends a message to the native application. Does not throw if the messenger is disconnected and you attempt to call `sendMessage`, it's just a no-op.
+
+### `createNodeMessenger(): NodeNativeMessenger`
+
+### `NodeNativeMessenger`
 
 A class wrapper around `stdin` and `stdout` which is how the Native Messaging protocol communicates with the native app.
 
+#### `onDisconnect(listener: (err?: Error) => void): () => void`
+
+Add a disconnect listener that receives an `Error` object if available. Called if the extension triggers the disconnect (The app only disconnects if the process is exited.)
+
+Returns a function that when called, removes the listener.
+
+#### `onMessage(listener: (msg: Message) => void): () => void`
+
+Add a message listener that receives a `Message` object whenever one is sent from the extension.
+
+Returns a function that when called, removes the listener.
+
 ### Types
 
-See [`src/types`]() for full list.
+See [`src/types`](/src/types) for full list.

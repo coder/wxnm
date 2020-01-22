@@ -1,3 +1,3 @@
-export * from './types'
+export * from './extension'
 export * from './node'
-export * from './browser'
+export * from './types'
