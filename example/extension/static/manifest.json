@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "wxnm example",
+  "description": "Example of native messaging with @coder/wxnm",
+  "version": "1.0.0",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "permissions": ["nativeMessaging"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "wxnmexample@coder.com",
+      "strict_min_version": "55.0"
+    }
+  }
+}

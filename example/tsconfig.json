@@ -1,12 +1,11 @@
 {
   "extends": "@coder/typescript-config",
   "compilerOptions": {
-    "module": "esnext", // Rollup requires this
-    "sourceMap": true,
-    "declaration": true,
+    "module": "esnext",
+    "lib": ["dom", "es2017"],
     "baseUrl": ".",
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["extension", "node", "types"],
   "exclude": ["node_modules"]
 }

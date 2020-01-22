@@ -11,6 +11,8 @@
   "scripts": {
     "build": "rm -rf dist/ && rollup -c",
     "build:watch": "rollup -c -w",
+    "example": "npm run example:extension",
+    "example:extension": "webpack --config example/extension/webpack.config.js",
     "prepublishOnly": "yarn build"
   },
   "files": [
@@ -24,13 +26,18 @@
     "@coder/eslint-config": "^1.0.0",
     "@coder/prettier-config": "^1.0.0",
     "@coder/typescript-config": "^1.0.0",
+    "copy-webpack-plugin": "^5.1.1",
     "eslint": "^6.8.0",
+    "html-webpack-plugin": "^3.2.0",
     "husky": "^4.2.0",
     "lint-staged": "^10.0.2",
     "prettier": "^1.19.1",
     "rollup": "^1.29.1",
     "rollup-plugin-typescript2": "^0.25.3",
-    "typescript": "^3.7.5"
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   },
   "husky": {
     "hooks": {
@@ -39,12 +46,10 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx,html,json,css,scss,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
-    "*.{ts,tsx}": [
-      "eslint --fix --max-warnings 0",
-      "git add"
+    "src/**/*.{ts,tsx}": [
+      "eslint --fix --max-warnings 0"
     ]
   }
 }
