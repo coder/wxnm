@@ -17,7 +17,9 @@
     "dist",
     "README.md"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "webextension-polyfill-ts": "^0.11.0"
+  },
   "devDependencies": {
     "@coder/eslint-config": "^1.0.0",
     "@coder/prettier-config": "^1.0.0",
