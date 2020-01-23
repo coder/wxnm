@@ -1,6 +1,6 @@
 # (W)eb E(x)tension (N)ative (M)essenger
 
-`wxnm` is a library for providing TypeScript typed communication between your web extension and your native Node application using [Native Messaging](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging). It also provides some utilities for installing your native application's app manifest.
+`wxnm` is a TypeScript library for providing typed communication between your web extension and your native Node application using [Native Messaging](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging). It also provides some utilities for installing your native application's app manifest.
 
 `wxnm` is meant for long-running applications and uses the [`runtime.connectNative`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/connectNative) API under the hood. If your use case only requires infrequent, one-off messages to be sent, it's recommended you use [`runtime.sendNativeMessage`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendNativeMessage) directly.
 
@@ -41,7 +41,7 @@ interface PongMessage extends NativeMessage {
 
 interface ErrorMessage extends NativeMessage {
   type: "ERROR"
-  error: string  
+  error: string
 }
 
 export type NativeMessages = PongMessage | ErrorMessage
