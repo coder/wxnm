@@ -5,11 +5,23 @@
         width: 300px;
         height: 300px;
       }
+
+      #error {
+        background: #f00;
+        color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      #error.hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
     <p>CPU Usage: <span id="stat-cpu"></span></p>
     <p>RAM Usage: <span id="stat-ram"></span></p>
     <p>HDD Usage: <span id="stat-hdd"></span></p>
+
+    <div id="error" class="hidden"></div>
   </body>
 </html>

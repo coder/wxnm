@@ -1,0 +1,25 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "Make an example chrome extension that does simple messaging back and forth. Ideally have a native-only use case, e.g. displaying system resources.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build:extension && npm run build:node",
+    "build:extension": "webpack --config extension/webpack.config.js",
+    "build:node": "webpack --config node/webpack.config.js && nexe node/dist/index.js -o node/dist/wxnm-node-example"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "copy-webpack-plugin": "^5.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "nexe": "^3.3.2",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}

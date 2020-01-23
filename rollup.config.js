@@ -1,18 +1,25 @@
 import typescript from "rollup-plugin-typescript2"
-import pkg from "./package.json"
+import resolve from "@rollup/plugin-node-resolve"
+import commonjs from "@rollup/plugin-commonjs"
+
+const plugins = [
+  resolve(),
+  commonjs(),
+  typescript({
+    typescript: require("typescript"),
+    useTsconfigDeclarationDir: true,
+  }),
+]
 
 export default [
   {
-    input: "src/index.ts",
-    external: Object.keys(pkg.peerDependencies || {}),
-    plugins: [
-      typescript({
-        typescript: require("typescript"),
-      }),
-    ],
-    output: [
-      { file: pkg.main, format: "cjs" },
-      { file: pkg.module, format: "esm" },
-    ],
+    input: "src/extension/index.ts",
+    output: [{ file: "dist/extension/index.js", format: "cjs" }],
+    plugins,
+  },
+  {
+    input: "src/node/index.ts",
+    output: [{ file: "dist/node/index.js", format: "cjs" }],
+    plugins,
   },
 ]

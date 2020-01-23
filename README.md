@@ -41,7 +41,7 @@ interface PongMessage extends NativeMessage {
 
 interface ErrorMessage extends NativeMessage {
   type: "ERROR"
-  error: string  
+  error: string
 }
 
 export type NativeMessages = PongMessage | ErrorMessage
@@ -52,7 +52,7 @@ export type NativeMessages = PongMessage | ErrorMessage
 In your web extension, you'll instantiate a new `ExtensionNativeMessenger` which will allow you to send and listen for messages:
 
 ```ts
-import { createExtensionMessenger } from "@coder/wxnm"
+import { createExtensionMessenger } from "@coder/wxnm/extension"
 import { ExtensionMessages, NativeMessages } from "../shared/types"
 
 const msger = createExtensionMessenger<ExtensionMessages, NativeMessages>("name_of_app")
@@ -77,7 +77,7 @@ msger.sendMessage({
 The node side looks very familiar, with the generics flipped for the `NodeNativeMessenger` class:
 
 ```ts
-import { createNodeMessenger } from "@coder/wxnm"
+import { createNodeMessenger } from "@coder/wxnm/node"
 import { ExtensionMessages, NativeMessages } from "../shared/types"
 
 const msger = createNodeMessenger<NativeMessages, ExtensionMessages>()
@@ -144,3 +144,7 @@ Returns a function that when called, removes the listener.
 ### Types
 
 See [`src/types`](/src/types) for full list.
+
+## Publishing
+
+Because using this package relies on you importing submodules, you must run `npm publish` from within the `dist/` directory to avoid imports having to add `/dist/` to their paths. If you attempt to publish from the top level, the `prepublishOnly` script will fail.
