@@ -1,7 +1,10 @@
+import os from "os"
 import { NativeMessage, MessageListener, DisconnectListener } from "../types"
 
+const IS_BE = os.endianness() === "BE"
+
 export function createNodeMessenger<NodeMessage extends NativeMessage, ExtensionMessage extends NativeMessage>() {
-  return new NodeNativeMessenger<NodeMessage, ExtensionMessage>();
+  return new NodeNativeMessenger<NodeMessage, ExtensionMessage>()
 }
 
 export class NodeNativeMessenger<NodeMessage extends NativeMessage, ExtensionMessage extends NativeMessage> {
@@ -9,7 +12,7 @@ export class NodeNativeMessenger<NodeMessage extends NativeMessage, ExtensionMes
   private disconnectListeners: DisconnectListener[] = []
 
   constructor() {
-    process.stdin.on('readable', this.handleStdin)
+    process.stdin.on("readable", this.handleStdin)
   }
 
   private handleStdin = () => {
@@ -17,16 +20,16 @@ export class NodeNativeMessenger<NodeMessage extends NativeMessage, ExtensionMes
     let chunk: unknown
 
     // eslint-disable-next-line no-cond-assign
-    while (chunk = process.stdin.read()) {
+    while ((chunk = process.stdin.read())) {
       input.push(chunk)
     }
 
     const buff = Buffer.concat(input as Uint8Array[])
-    const msgLen = buff.readUInt32LE(0)
+    const msgLen = IS_BE ? buff.readUInt32BE(0) : buff.readUInt32LE(0)
     const dataLen = msgLen + 4
 
-    if (buff.length > dataLen) {
-      const content = input.slice(4, dataLen)
+    if (buff.length >= dataLen) {
+      const content = buff.slice(4, dataLen)
       const msg = JSON.parse(content.toString())
       this.handleMessage(msg)
     }
@@ -69,7 +72,8 @@ export class NodeNativeMessenger<NodeMessage extends NativeMessage, ExtensionMes
   sendMessage(msg: NodeMessage) {
     const json = JSON.stringify(msg)
     const header = Buffer.alloc(4)
-    header.writeUInt32LE(json.length, 0)
+
+    IS_BE ? header.writeUInt32BE(json.length, 0) : header.writeUInt32LE(json.length, 0)
 
     process.stdout.write(header)
     process.stdout.write(json)

@@ -1,16 +1,14 @@
 import { NativeMessage } from "@coder/wxnm"
 
-export interface RequestStatsMessage extends NativeMessage {
-  type: "REQUEST_STATS"
+export interface RequestProcessIDMessage extends NativeMessage {
+  type: "REQUEST_PROCID"
 }
 
-export type ExtensionMessage = StatsMessage
+export type ExtensionMessage = RequestProcessIDMessage
 
-export interface StatsMessage extends NativeMessage {
-  type: "STATS"
-  cpu: number
-  ram: number
-  hdd: number
+export interface ProcessIDMessage extends NativeMessage {
+  type: "PROCID"
+  id: number
 }
 
-export type NodeMessage = StatsMessage
+export type NodeMessage = ProcessIDMessage
