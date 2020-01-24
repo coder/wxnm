@@ -18,9 +18,9 @@
 | Opera         |    ✕    |   ✕   |  ✓  |
 | Vivaldi       |    ✕    |   ✓   |  ✓  |
 
-<small>✓ - supported</small>
-<small>✕ - not supported</small>
-<small>blank - OS does not support this browser</small>
+<div><sup>✓ - supported</sup></div>
+<div><sup>✕ - not supported</sup></div>
+<div><sup>blank - OS does not support this browser</sup></div>
 
 Windows support is a WIP
 
