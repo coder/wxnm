@@ -4,6 +4,26 @@
 
 `wxnm` is meant for long-running applications and uses the [`runtime.connectNative`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/connectNative) API under the hood. If your use case only requires infrequent, one-off messages to be sent, it's recommended you use [`runtime.sendNativeMessage`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendNativeMessage) directly.
 
+## Compatibility
+
+| Browser       | Windows | Linux | Mac |
+| :------------ | :-----: | :---: | :-: |
+| Firefox       |    ✕    |   ✓   |  ✓  |
+| Waterfox      |    ✕    |   ✓   |  ✓  |
+| Chrome        |    ✕    |   ✓   |  ✓  |
+| Chrome Canary |    ✕    |       |  ✓  |
+| Chrome Beta   |    ✕    |   ✓   |     |
+| Chromium      |         |   ✓   |  ✓  |
+| Brave         |    ✕    |   ✓   |  ✓  |
+| Opera         |    ✕    |   ✕   |  ✓  |
+| Vivaldi       |    ✕    |   ✓   |  ✓  |
+
+<small>✓ - supported</small>
+<small>✕ - not supported</small>
+<small>blank - OS does not support this browser</small>
+
+Windows support is a WIP
+
 ## Installation
 
 ```bash
@@ -12,9 +32,30 @@ npm install @coder/wxnm
 yarn add @coder/wxnm
 ```
 
-## Setup
+## Example
 
-Before your extension and your app can communicate, the app will need to register an application manifest on the user's machine, and the extension will need to declare the `nativeMessaging` permission in its manifest. This library provides a utility for the former, and you can see an example of the latter in the [`example` directory](/example).
+See the [`example` directory](/example) for a full implementation of an extension that talks to a native application to get its process ID.
+
+## Installing your Native Messaging App
+
+Before your extension and your native app can communicate, the app will need to register an application manifest on the user's machine, and the extension will need to declare the `nativeMessaging` permission in its manifest. This library provides an `installManifest` utility to install a manifest for all of the user's currently installed browsers, which you can put somewhere in your app as either its own executable, or run via a flag on your main executable. For instance:
+
+```ts
+// If passed --install, install the manifest
+const argv = yargs.argv
+if (argv.install) {
+  installManifest({
+    name: "com.coder.wxnm_example",
+    description: "Example of the wxnm library",
+    path: path.resolve("./node/dist/wxnm-node-example"),
+    chromeExtensionIds: [process.env.CHROME_EXTENSION_ID],
+    webExtensionIds: ["wxnmexample@coder.com"],
+  })
+  process.exit(0)
+}
+```
+
+See the example for more info.
 
 ## Usage
 
@@ -121,7 +162,7 @@ Returns a function that when called, removes the listener.
 
 ### `sendMessage(msg: Message): void`
 
-Sends a message to the native application. Does not throw if the messenger is disconnected and you attempt to call `sendMessage`, it's just a no-op.
+Sends a message to the native application. Must be a JSON serializable message. Does not throw if the messenger is disconnected and you attempt to call `sendMessage`, it's just a no-op.
 
 ### `createNodeMessenger(): NodeNativeMessenger`
 
@@ -140,6 +181,10 @@ Returns a function that when called, removes the listener.
 Add a message listener that receives a `Message` object whenever one is sent from the extension.
 
 Returns a function that when called, removes the listener.
+
+#### `sendMessage(msg: Message): void`
+
+Sends a message to the extension. Must be a JSON serializable message.
 
 ### Types
 
