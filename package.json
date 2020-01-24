@@ -3,8 +3,15 @@
   "version": "0.0.1",
   "description": "A library for providing TypeScript typed communication between your web extension and your native Node application using Native Messaging",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/cdr/wxnm",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdr/wxnm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cdr/wxnm/issues"
+  },
+  "homepage": "https://github.com/cdr/wxnm#readme",
   "prettier": "@coder/prettier-config",
   "scripts": {
     "build": "rm -rf dist/ && rollup -c && cp package.json dist/package.json",
